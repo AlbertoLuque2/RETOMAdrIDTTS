@@ -12,11 +12,13 @@ function Form({ setAudioData }) {
         setLoading(true);
         setConsultas(consultas + 1);
         const title = "Consulta" + " " + consultas;
+        const token = localStorage.getItem('token');
 
         fetch("http://127.0.0.1:8000/api/tasks/", {
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             method: "POST",
             body: JSON.stringify({ title, description, voz }),
@@ -31,39 +33,38 @@ function Form({ setAudioData }) {
             })
             .finally(() => {
                 setLoading(false);
-            });;
-};
+            });
+    };
 
-
-return (
-    <>
-        <section className='formulario'>
-            <div className='formQuery'>
-                <form onSubmit={handleAdd}>
-                    <label>Ingresa el texto que quieras sintetizar</label>
-                    <textarea
-                        required
-                        type="text"
-                        onChange={(event) => {
-                            setDescription(event.target.value)
-                            console.log(description)
-                        }}
-                        disabled={loading}
-                    />
-                    <label>Elige la voz que quieras utilizar: </label>
-                    <select onChange={(event) =>{
-                        setVoz(event.target.value)
-                        console.log(voz)
-                    }} defaultValue={"Susana"} name='vozelegida' id='vozelegida' required>
-                        <option value="Susana">Susana</option>
-                        <option value="Cuba">Cuba</option>
-                    </select>
-                    <button type="submit" disabled={loading}>{loading ? "Cargando..." : "Generar Audio"}</button>
-                </form>
-            </div>
-        </section>
-    </>
-)
+    return (
+        <>
+            <section className='formulario'>
+                <div className='formQuery'>
+                    <form onSubmit={handleAdd}>
+                        <label>Ingresa el texto que quieras sintetizar</label>
+                        <textarea
+                            required
+                            type="text"
+                            onChange={(event) => {
+                                setDescription(event.target.value)
+                                console.log(description)
+                            }}
+                            disabled={loading}
+                        />
+                        <label>Elige la voz que quieras utilizar: </label>
+                        <select onChange={(event) =>{
+                            setVoz(event.target.value)
+                            console.log(voz)
+                        }} defaultValue={"Susana"} name='vozelegida' id='vozelegida' required>
+                            <option value="Susana">Susana</option>
+                            <option value="Cuba">Cuba</option>
+                        </select>
+                        <button type="submit" disabled={loading}>{loading ? "Cargando..." : "Generar Audio"}</button>
+                    </form>
+                </div>
+            </section>
+        </>
+    )
 }
 
 export default Form
